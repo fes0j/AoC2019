@@ -7,7 +7,8 @@ fn main() -> io::Result<()> {
     let f = File::open("input")?;
     let f = BufReader::new(f);
 
-    let mut module_sum: i32 = 0;
+    let mut module_sum1: i32 = 0;
+    let mut module_sum2: i32 = 0;
     let mut modules: Vec<i32> = Vec::new();
 
     for line in f.lines() {
@@ -15,10 +16,16 @@ fn main() -> io::Result<()> {
         modules.push(mass);
     }
 
-    for mass in modules {
-        module_sum += module2fuel(mass);
+    for mass in &mut modules {
+        let fuel = (*mass / 3) -2;
+        module_sum1 = module_sum1.add( fuel);
     }
-    println!("Sum: {}", module_sum);
+    println!("Our needed fuel is: {}", module_sum1);
+
+    for mass in &mut modules {
+        module_sum2 += module2fuel(*mass);
+    }
+    println!("Oh no! It really is  {}", module_sum2);
 
     Ok(())
 }
