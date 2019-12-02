@@ -1,7 +1,6 @@
 use std::io::{self, BufReader};
 use std::io::prelude::*;
 use std::fs::File;
-use std::ops::Deref;
 
 fn main() -> io::Result<()> {
     let f = File::open("input")?;
@@ -10,7 +9,7 @@ fn main() -> io::Result<()> {
 
     let line = f.lines().nth(0).expect("Line read fault").expect("no fist line");
     let ops: Vec<&str> = line.split(',').collect();
-    let mut ops: Vec<usize> = ops.iter().map(|code| code.parse::<usize>().unwrap()).collect();
+    let ops: Vec<usize> = ops.iter().map(|code| code.parse::<usize>().unwrap()).collect();
   //  let mut ops: Vec<usize> = vec![1,1,1,4,99,5,6,0,99];//test data
 
     println!("Read in has {} codes", ops.len());
@@ -24,13 +23,8 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 
-fn part2(mut ops : Vec<usize>)-> Result<(usize, usize),()>{
+fn part2(ops : Vec<usize>)-> Result<(usize, usize),()>{
     let output =19690720;
-
-
-    let mut noun = 0;
-    let mut verb = 0;
-
 
     for noun  in 0..99 {
         for verb in 0..99 {
