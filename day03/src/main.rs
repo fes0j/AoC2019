@@ -17,14 +17,15 @@ fn main() -> io::Result<()> {
     let curves = extract_curves(f);
     let curve1 = curves[0].clone();
     let curve2 = curves[1].clone();
-    curve1.intersect(curve2);
+    let mut intersections =  curve1.intersect(curve2);
+    println!("There are {} intersections", intersections.len());
     intersections.sort_by(
         |a, b|
-            a.euklid_distance().partial_cmp(&b.euklid_distance())
+            a.m_distance().partial_cmp(&b.m_distance())
                 .unwrap()
     );
     let int: Point = *intersections.first().unwrap();
-    println!("Point: x={}, y={}. ",int.x, int.y);
+    println!("Point: x={}, y={}, distance: {}. ",int.x, int.y, int.m_distance());
     Ok(())
 }
 
@@ -43,47 +44,35 @@ fn extract_curves(f: BufReader<File>) -> Vec<Vec<Point>> {
             let distance: i32 = chars.as_str().parse::<i32>().unwrap();
 
 
+            let last_coordinate = match curve.last() {
+                Some(p) => p.clone(),
+                None => Point { x: 0, y: 0 },
+            };
             match direction.unwrap() {
                 'U' => {
-                    for _i in 1..distance {
-                        let last_coordinate = match curve.last() {
-                            Some(p) => p.clone(),
-                            None => Point { x: 0, y: 0 },
-                        };
-                        curve.push(Point { x: last_coordinate.x, y: last_coordinate.y + 1 });
+                    for i in 1..distance {
+                        curve.push(Point { x: last_coordinate.x, y: last_coordinate.y + i });
                     }
                 }
                 'D' => {
-                    for _i in 1..distance {
-                        let last_coordinate = match curve.last() {
-                            Some(p) => p.clone(),
-                            None => Point { x: 0, y: 0 },
-                        };
-                        curve.push(Point { x: last_coordinate.x, y: last_coordinate.y - 1 });
+                    for i in 1..distance {
+                        curve.push(Point { x: last_coordinate.x, y: last_coordinate.y - i });
                     }
                 }
                 'L' => {
-                    for _i in 1..distance {
-                        let last_coordinate = match curve.last() {
-                            Some(p) => p.clone(),
-                            None => Point { x: 0, y: 0 },
-                        };
-                        curve.push(Point { x: last_coordinate.x - 1, y: last_coordinate.y });
+                    for i in 1..distance {
+                        curve.push(Point { x: last_coordinate.x - i, y: last_coordinate.y });
                     }
                 }
                 'R' => {
-                    for _i in 1..distance {
-                        let last_coordinate = match curve.last() {
-                            Some(p) => p.clone(),
-                            None => Point { x: 0, y: 0 },
-                        };
-                        curve.push(Point { x: last_coordinate.x + 1, y: last_coordinate.y });
+                    for i in 1..distance {
+                        curve.push(Point { x: last_coordinate.x + i, y: last_coordinate.y });
                     }
                 }
                 _ => print!("kaputt"),
             }
         }
-
+        println!("Curve size: {}", curve.len());
 
         curves.push(curve);
     }
