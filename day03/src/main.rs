@@ -1,6 +1,7 @@
 use std::io::{self, BufReader};
 use std::io::prelude::*;
 use std::fs::File;
+use array_tool::vec::Intersect;
 
 
 #[derive(Copy, Clone)]
@@ -15,7 +16,8 @@ fn main() -> io::Result<()> {
 
     let curves = extract_curves(f);
     let curve1 = curves[0].clone();
-    let mut intersections : Vec<Point>= curve1.into_iter().filter(|p| curves[1].contains(p)).collect();
+    let curve2 = curves[1].clone();
+    curve1.intersect(curve2);
     intersections.sort_by(
         |a, b|
             a.euklid_distance().partial_cmp(&b.euklid_distance())

@@ -5,3 +5,4 @@ authors = ["fes0j <fes0j@users.noreply.github.com>"]
 edition = "2018"
 
 [dependencies]
+array_tool = "1.0.3"
